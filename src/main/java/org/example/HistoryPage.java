@@ -1,6 +1,6 @@
-package src;
-import javax.swing.*;
+package org.example;
 
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.*;

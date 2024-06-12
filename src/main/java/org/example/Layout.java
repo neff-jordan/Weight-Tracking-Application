@@ -1,4 +1,4 @@
-package src;
+package org.example;
 import javax.swing.JFrame;
 
 import java.awt.*;

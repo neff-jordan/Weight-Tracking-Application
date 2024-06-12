@@ -1,4 +1,4 @@
-package src;
+package org.example;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

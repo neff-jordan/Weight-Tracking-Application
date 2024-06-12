@@ -1,4 +1,4 @@
-package src;
+package org.example;
 public class Main {
     public static void main(String[] args) { 
         // current line counter = 177

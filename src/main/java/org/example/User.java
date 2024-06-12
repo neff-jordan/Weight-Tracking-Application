@@ -1,17 +1,21 @@
-package src;
-public class User  { 
+package org.example;
+
+
+public class User  {
     private String firstName;
     private String lastName;
-    private int age;
-    private int height; 
+    private String username;
+    private String password;
+    private int height;
     private int weight;
 
-    // maybe add userPass and username 
-    
-    public User(String firstName, String lastName, int age, int height, int weight) {
+    // maybe add userPass and username
+
+    public User(String firstName, String lastName, String username,String password, int height, int weight) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.age = age;
+        this.username = username;
+        this.password = password;
         this.height = height;
         this.weight = weight;
     }
@@ -28,11 +32,17 @@ public class User  {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public int getAge() {
-        return age;
+    public String getUsername() {
+        return username;
     }
-    public void setAge(int age) {
-        this.age = age;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
     public int getHeight() {
         return height;
