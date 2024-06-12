@@ -79,6 +79,7 @@ public class LoginPage implements ActionListener{
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
 
+			 // if database contains this username
 			if(logininfo.containsKey(userID)) {
 				if(logininfo.get(userID).equals(password)) {
 					messageLabel.setForeground(Color.green);

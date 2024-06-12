@@ -99,6 +99,8 @@ public class CreateAccount implements ActionListener {
                     // how to add this new user to the IDandPassword class or connect to database 
                     //
                     currentUserInfo.createLoginInfo(usernameText, passwordText);
+                    SQLiteConnection connect = new SQLiteConnection();
+                    connect.addUser(newUser);
                 }
 
             }
