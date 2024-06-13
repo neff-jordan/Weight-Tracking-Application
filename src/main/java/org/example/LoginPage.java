@@ -17,9 +17,9 @@ public class LoginPage implements ActionListener{
 	JLabel messageLabel = new JLabel();
 	HashMap<String,String> logininfo = new HashMap<String,String>();
 
-	LoginPage(HashMap<String,String> loginInfoOriginal){
-
-		logininfo = loginInfoOriginal;
+	LoginPage(){
+		//HashMap<String,String> loginInfoOriginal (was in the parameter)
+		//logininfo = loginInfoOriginal;
 
 		userIDLabel.setBounds(113,170,75,25);			/////////
 		userPasswordLabel.setBounds(113,220,75,25);	/////////
@@ -79,9 +79,14 @@ public class LoginPage implements ActionListener{
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
 
-			 // if database contains this username
-			if(logininfo.containsKey(userID)) {
-				if(logininfo.get(userID).equals(password)) {
+			//
+			// if database contains this username
+			//
+			SQLiteConnection connect = new SQLiteConnection();
+
+
+			if(connect.containsUsername(userID)) {
+				if(connect.getPassword(userID).equals(password)) {
 					messageLabel.setForeground(Color.green);
 					messageLabel.setText("Login successful");
 					frame.dispose();

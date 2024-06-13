@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLiteConnection {
     private Connection connection;
@@ -28,9 +30,11 @@ public class SQLiteConnection {
         }
     }
 
+
+
     // CREATE operation
     public void addUser(User user) {
-        String sql = "INSERT INTO users(firstName, lastName, username, password, height, weight) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users(firstName, lastName, username, password, height, weight, targetWeight, startWeight) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, user.getFirstName());
@@ -39,6 +43,8 @@ public class SQLiteConnection {
             statement.setString(4, user.getPassword());
             statement.setInt(5, user.getHeight());
             statement.setInt(6, user.getWeight());
+            statement.setInt(7,user.getTargetWeight());
+            statement.setInt(8, user.getStartWeight());
             statement.executeUpdate();
             System.out.println("User added successfully.");
         } catch (SQLException e) {
@@ -61,7 +67,9 @@ public class SQLiteConnection {
                         resultSet.getString("username"),
                         resultSet.getString("password"),
                         resultSet.getInt("height"),
-                        resultSet.getInt("weight")
+                        resultSet.getInt("weight"),
+                        resultSet.getInt("targetWeight"),
+                        resultSet.getInt("startWeight")
                 );
             }
         } catch (SQLException e) {
@@ -132,5 +140,38 @@ public class SQLiteConnection {
         return false;
     }
 
+    public String getPassword(String username) {
+        String sql = "SELECT password FROM users WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            // If resultSet has any rows, retrieve the password
+            if (resultSet.next()) {
+                return resultSet.getString("password");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get password.");
+            e.printStackTrace();
+        }
+        return null; // Return null if the username does not exist or an error occurred
+    }
+
+    // returns the list of users
+    public List<String> getAllUsers() {
+        List<String> users = new ArrayList<>();
+        String sql = "SELECT username FROM users";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                users.add(resultSet.getString("username"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get all users.");
+            e.printStackTrace();
+        }
+        return users;
+    }
 
 }

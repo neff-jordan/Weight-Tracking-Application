@@ -15,6 +15,8 @@ public class CreateAccount implements ActionListener {
     JLabel password = new JLabel("password: ");
     JLabel height = new JLabel("height (inches): ");
     JLabel weight = new JLabel("weight (lbs): ");
+    JLabel targetWeight = new JLabel("target weight (lbs): ");
+    //JLabel startWeight = new JLabel("starting (lbs): ");
 
     JTextField first = new JTextField();
     JTextField last = new JTextField();
@@ -22,8 +24,12 @@ public class CreateAccount implements ActionListener {
     JPasswordField pass = new JPasswordField(); 
     JTextField inches = new JTextField();
     JTextField lbs = new JTextField();
+    JTextField target = new JTextField();
+    //JTextField start = new JTextField();
+
 
     JButton submit = new JButton("submit");
+    JButton back = new JButton("back");
 
     CreateAccount() { 
 
@@ -33,6 +39,7 @@ public class CreateAccount implements ActionListener {
         password.setBounds(98, 200, 100, 25); 
         height.setBounds(98, 250, 120, 25);
         weight.setBounds(98, 300, 120, 25);
+        targetWeight.setBounds(98,350,120,25);
 
         first.setBounds(223, 50, 200, 25);
         last.setBounds(223, 100, 200, 25);
@@ -40,9 +47,12 @@ public class CreateAccount implements ActionListener {
         pass.setBounds(223, 200, 200, 25); 
         inches.setBounds(223, 250, 200, 25);
         lbs.setBounds(223, 300, 200, 25);
+        target.setBounds(223,350,200,25);
 
-        submit.setBounds(210, 350, 100, 25); 
+        submit.setBounds(210, 450, 100, 25);
         submit.addActionListener(this);
+        back.setBounds(210,400,100,25);
+        back.addActionListener(this);
 
         frame.add(firstname);
         frame.add(lastname);
@@ -50,13 +60,16 @@ public class CreateAccount implements ActionListener {
         frame.add(password); 
         frame.add(height);
         frame.add(weight);
+        frame.add(targetWeight);
         frame.add(first);
         frame.add(last);
         frame.add(user);
         frame.add(pass); 
         frame.add(inches);
         frame.add(lbs);
+        frame.add(target);
         frame.add(submit);
+        frame.add(back);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(520, 640);
@@ -69,6 +82,11 @@ public class CreateAccount implements ActionListener {
 
     public void actionPerformed(ActionEvent e) { 
 
+        if(e.getSource()==back) {
+            frame.dispose();
+            LoginPage goBackToLogin = new LoginPage();
+        }
+
         if(e.getSource()==submit) { 
 
             // check to see if the fields are filled
@@ -77,7 +95,8 @@ public class CreateAccount implements ActionListener {
             String usernameText = user.getText();
             String heightText = inches.getText();   // needs exception check here to make sure the input is a number
             String weightText = lbs.getText();      // needs exception check here to make sure the input is a number
-            String passwordText = new String(pass.getPassword()); 
+            String passwordText = new String(pass.getPassword());
+            String targetWeightText = target.getText();
 
             if (firstNameText.isEmpty() || lastNameText.isEmpty() || usernameText.isEmpty() || heightText.isEmpty() || weightText.isEmpty() || passwordText.isEmpty()) {
 
@@ -85,36 +104,28 @@ public class CreateAccount implements ActionListener {
                 return;
             }
 
-            IDandPasswords currentUserInfo = new IDandPasswords();
-            HashMap<String, String> check = currentUserInfo.getLoginInfo();
-            for(String usernames : check.keySet()) { 
+
+            SQLiteConnection connection = new SQLiteConnection();
+            // rewrite these first few lines and replace with database calls.
+            for(String usernames : connection.getAllUsers()) {
                 if(usernames.equals(usernameText)) { 
                     JOptionPane.showMessageDialog(frame, "Error! Username already taken.");
                     return;
                 } else {
                     int convertedHeight = Integer.parseInt(heightText);
                     int convertedWeight = Integer.parseInt(weightText);
-                    User newUser = new User(firstNameText, lastNameText, usernameText, passwordText, convertedHeight, convertedWeight);
-                    //
-                    // how to add this new user to the IDandPassword class or connect to database 
-                    //
-                    currentUserInfo.createLoginInfo(usernameText, passwordText);
+                    int convertedTargetWeight = Integer.parseInt(targetWeightText);                                                                            // the init and starting wieght will be the same upon account creation
+                    User newUser = new User(firstNameText, lastNameText, usernameText, passwordText, convertedHeight, convertedWeight, convertedTargetWeight, convertedWeight);
                     SQLiteConnection connect = new SQLiteConnection();
                     connect.addUser(newUser);
                 }
-
             }
-
             JOptionPane.showMessageDialog(frame, "Account created successfully!");
             frame.dispose();
-            LoginPage goBackToLogin = new LoginPage(check);
+            LoginPage goBackToLogin = new LoginPage();
         }
-
-        // make a back button
-
     }
 
-    // public static void main(String[] args) { SwingUtilities.invokeLater(() -> { new CreateAccount();});}
-
+    //public static void main(String[] args) { SwingUtilities.invokeLater(() -> { new CreateAccount();});}
     
 }

@@ -8,16 +8,20 @@ public class User  {
     private String password;
     private int height;
     private int weight;
+    private int targetWeight;
+    private int startWeight;
 
     // maybe add userPass and username
 
-    public User(String firstName, String lastName, String username,String password, int height, int weight) {
+    public User(String firstName, String lastName, String username,String password, int height, int weight, int targetWeight, int startWeight) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.height = height;
         this.weight = weight;
+        this.targetWeight = targetWeight;
+        this.startWeight = startWeight;
     }
 
     public String getFirstName() {
@@ -57,4 +61,19 @@ public class User  {
         this.weight = weight;
     }
 
+    public int getStartWeight() {
+        return startWeight;
+    }
+
+    public void setStartWeight(int startWeight) {
+        this.startWeight = startWeight;
+    }
+
+    public int getTargetWeight() {
+        return targetWeight;
+    }
+
+    public void setTargetWeight(int targetWeight) {
+        this.targetWeight = targetWeight;
+    }
 }

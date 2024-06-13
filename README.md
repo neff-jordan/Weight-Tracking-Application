@@ -6,10 +6,10 @@ known bugs:
 
 2) clicking graph multiple times in a row causes duplicate frames
 
-3) need to implement my user class so accounts can be created and data can be used throughout the program. 
+3) finish implementing the database throughout the program
 
 4) need to build my linear model for the weight prediction in the home and graph pages. 
 
 5) need to style the pages with more swing or html/css
 
-6) figure out if i can post this to the macOS store. 
+6) figure out how to make downloadable from Github. 
