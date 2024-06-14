@@ -47,18 +47,23 @@ public abstract class Layout extends JPanel implements ActionListener {
 
     // set up action listener 
 	public void actionPerformed(ActionEvent e) {
+
+        // how do i get the current user object to be here
+        CurrentUser currentUser = CurrentUser.getInstance();
+        String user = currentUser.getLoggedInUser();
+
 		if(e.getSource()==homeButton) { 
 			frame.dispose();
-			HomePage home = new HomePage("");
+			HomePage home = new HomePage(user);
 		} else if(e.getSource()==weighInButton) { 
 			frame.dispose();
-			WeighInPage weigh = new WeighInPage("");
+			WeighInPage weigh = new WeighInPage(user);
 		} else if (e.getSource()==graphButton) { 
             frame.dispose();
-            GraphPage graphPage = new GraphPage();
+            GraphPage graphPage = new GraphPage(user);
         } else if (e.getSource()==historyButton) { 
             frame.dispose();
-            HistoryPage history = new HistoryPage(); 
+            HistoryPage history = new HistoryPage(user);
         } 
 	}
 }

@@ -87,6 +87,8 @@ public class LoginPage implements ActionListener{
 
 			if(connect.containsUsername(userID)) {
 				if(connect.getPassword(userID).equals(password)) {
+					// call a method here and put in the successful login info so i can access the username
+					CurrentUser.setInstance(userID);					//
 					messageLabel.setForeground(Color.green);
 					messageLabel.setText("Login successful");
 					frame.dispose();

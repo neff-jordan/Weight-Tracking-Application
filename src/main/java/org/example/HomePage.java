@@ -5,12 +5,15 @@ import javax.swing.*;
 
 public class HomePage extends Layout {
 
+	SQLiteConnection connection = new SQLiteConnection();
+	CurrentUser currentUser = CurrentUser.getInstance();
     JLabel startLabel = new JLabel("Starting Weight");
     JLabel currentLabel = new JLabel("Current Weight");
     JLabel targetLabel = new JLabel("Target Weight");
-    JLabel startNumLabel = new JLabel("170");
-    JLabel currentNumLabel = new JLabel("172");
-    JLabel targetNumLabel = new JLabel("185");
+	JLabel startNumLabel = new JLabel("" + connection.getStartWeight(currentUser.getLoggedInUser()));
+	JLabel currentNumLabel = new JLabel("" + connection.getCurrentWeight(currentUser.getLoggedInUser()));
+	JLabel targetNumLabel = new JLabel("" + connection.getTargetWeight(currentUser.getLoggedInUser()));
+
 
     HomePage(String userID) {
 

@@ -13,3 +13,5 @@ known bugs:
 5) need to style the pages with more swing or html/css
 
 6) figure out how to make downloadable from Github. 
+
+think about using bmi with break calipers AND adding a calorie counter 

@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 public class HistoryPage extends Layout {
     
-    HistoryPage() { 
+    HistoryPage(String  username) {
         super();
 
         JPanel abstractPanel = new JPanel(new BorderLayout());
@@ -47,7 +47,7 @@ public class HistoryPage extends Layout {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new HistoryPage();
+            new HistoryPage("");
         });
     }
      

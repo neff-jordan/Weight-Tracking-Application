@@ -174,4 +174,54 @@ public class SQLiteConnection {
         return users;
     }
 
+    // get start, current, and target weights
+    public int getStartWeight(String username) {
+        String sql = "SELECT startWeight FROM users WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("startWeight");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get start weight.");
+            e.printStackTrace();
+        }
+        return -1; // Return -1 if there is an error or the user does not exist
+    }
+
+    public int getCurrentWeight(String username) {
+        String sql = "SELECT weight FROM users WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("weight");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get current weight.");
+            e.printStackTrace();
+        }
+        return -1; // Return -1 if there is an error or the user does not exist
+    }
+
+    public int getTargetWeight(String username) {
+        String sql = "SELECT targetWeight FROM users WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("targetWeight");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get target weight.");
+            e.printStackTrace();
+        }
+        return -1; // Return -1 if there is an error or the user does not exist
+    }
+
+
 }

@@ -10,7 +10,7 @@ public class GraphPage extends Layout {
 
     private ScatterPlot scatterPlot;
 
-    GraphPage() {
+    GraphPage(String username) {
         super(); // Call the constructor of the superclass (Layout)
 
         // Modify buttons' actions if needed
@@ -48,7 +48,7 @@ public class GraphPage extends Layout {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new GraphPage();
+            new GraphPage("");
         });
     }
 }
