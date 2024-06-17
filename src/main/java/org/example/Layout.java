@@ -1,35 +1,29 @@
 package org.example;
-import javax.swing.JFrame;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public abstract class Layout extends JPanel implements ActionListener {
-    
-    JFrame frame = new JFrame();
-    JButton homeButton = new JButton("Home");
-    JButton weighInButton = new JButton("Weigh-In");
-    JButton graphButton = new JButton("Graph");
-    JButton historyButton = new JButton("History");
-    
-    Layout() { 
+    protected JFrame frame = new JFrame();
+    protected JButton homeButton = new JButton("Home");
+    protected JButton weighInButton = new JButton("Weigh-In");
+    protected JButton graphButton = new JButton("Graph");
+    protected JButton historyButton = new JButton("History");
+    protected SQLiteConnection connection;
+
+    public Layout() {
+        this.connection = SQLiteConnection.getInstance();
 
         frame.setLayout(new BorderLayout());
-        
+
         homeButton.addActionListener(this);
         weighInButton.addActionListener(this);
         graphButton.addActionListener(this);
-		historyButton.addActionListener(this);
+        historyButton.addActionListener(this);
 
-        // Set preferred sizes for buttons
-        homeButton.setPreferredSize(new Dimension(125, 125));
-        //weighInButton.setPreferredSize(new Dimension(125, 125));
-        //graphButton.setPreferredSize(new Dimension(125, 125));
-        //historyButton.setPreferredSize(new Dimension(125, 125));
-
-        // Add buttons to the frame
-        JPanel buttonsPanel = new JPanel(new GridLayout(1,4));
+        JPanel buttonsPanel = new JPanel(new GridLayout(1, 4));
         buttonsPanel.add(homeButton);
         buttonsPanel.add(weighInButton);
         buttonsPanel.add(graphButton);
@@ -38,32 +32,30 @@ public abstract class Layout extends JPanel implements ActionListener {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-		frame.setBackground(Color.yellow);
         frame.setSize(520, 640);
-		frame.setMinimumSize(new Dimension(520, 640));
-        frame.setMaximumSize(new Dimension(520, 640)); 
-		frame.setTitle("Weight Tracker");
+        frame.setMinimumSize(new Dimension(520, 640));
+        frame.setMaximumSize(new Dimension(520, 640));
+        frame.setTitle("Weight Tracker");
     }
 
-    // set up action listener 
-	public void actionPerformed(ActionEvent e) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
-        // how do i get the current user object to be here
         CurrentUser currentUser = CurrentUser.getInstance();
         String user = currentUser.getLoggedInUser();
 
-		if(e.getSource()==homeButton) { 
-			frame.dispose();
-			HomePage home = new HomePage(user);
-		} else if(e.getSource()==weighInButton) { 
-			frame.dispose();
-			WeighInPage weigh = new WeighInPage(user);
-		} else if (e.getSource()==graphButton) { 
+        if (e.getSource() == homeButton) {
             frame.dispose();
-            GraphPage graphPage = new GraphPage(user);
-        } else if (e.getSource()==historyButton) { 
+            new HomePage(user, connection);
+        } else if (e.getSource() == weighInButton) {
             frame.dispose();
-            HistoryPage history = new HistoryPage(user);
-        } 
-	}
+            new WeighInPage(user, connection);
+        } else if (e.getSource() == graphButton) {
+            frame.dispose();
+            new GraphPage(user, connection);
+        } else if (e.getSource() == historyButton) {
+            frame.dispose();
+            new HistoryPage(user, connection);
+        }
+    }
 }

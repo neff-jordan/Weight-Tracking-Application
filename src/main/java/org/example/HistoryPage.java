@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 public class HistoryPage extends Layout {
     
-    HistoryPage(String  username) {
+    HistoryPage(String username, SQLiteConnection connection) {
         super();
 
         JPanel abstractPanel = new JPanel(new BorderLayout());
@@ -45,11 +45,5 @@ public class HistoryPage extends Layout {
         super.actionPerformed(e);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new HistoryPage("");
-        });
-    }
-     
 
 }

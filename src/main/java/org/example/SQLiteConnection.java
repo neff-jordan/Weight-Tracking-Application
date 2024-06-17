@@ -9,25 +9,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLiteConnection {
+    private static SQLiteConnection instance;
     private Connection connection;
+    private String url = "jdbc:sqlite:/Users/jordanneff/Desktop/Projects/Weight-Tracking-Application/src/main/resources/mydatabase.db"; // Replace with the path to your SQLite database file
 
-    public SQLiteConnection() {
+
+    private SQLiteConnection() {
         try {
-            // Load the SQLite JDBC driver
             Class.forName("org.sqlite.JDBC");
-
-            // Connect to the database
-            String url = "jdbc:sqlite:/Users/jordanneff/Desktop/Projects/Weight-Tracking-Application/src/main/resources/mydatabase.db"; // Replace with the path to your SQLite database file
-            connection = DriverManager.getConnection(url);
-
+            this.connection = DriverManager.getConnection(url);
             System.out.println("Connected to the database.");
-        } catch (ClassNotFoundException e) {
-            System.out.println("SQLite JDBC driver not found.");
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Failed to connect to the database.");
             e.printStackTrace();
         }
+    }
+
+    public static synchronized SQLiteConnection getInstance() {
+        if (instance == null) {
+            instance = new SQLiteConnection();
+        }
+        return instance;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
 
@@ -207,6 +213,24 @@ public class SQLiteConnection {
         return -1; // Return -1 if there is an error or the user does not exist
     }
 
+    public boolean setCurrentWeight(String username, double newCurrent) {
+        String sql = "UPDATE users SET weight = ? WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDouble(1, newCurrent);
+            statement.setString(2, username);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true; // Successfully updated
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to set current weight.");
+            e.printStackTrace();
+        }
+        return false; // Return false if there is an error or the user does not exist
+    }
+
+
     public int getTargetWeight(String username) {
         String sql = "SELECT targetWeight FROM users WHERE username = ?";
         try {
@@ -221,6 +245,39 @@ public class SQLiteConnection {
             e.printStackTrace();
         }
         return -1; // Return -1 if there is an error or the user does not exist
+    }
+
+    public boolean setTargetWeight(String username, double newCurrent) {
+        String sql = "UPDATE users SET targetWeight = ? WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDouble(1, newCurrent);
+            statement.setString(2, username);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true; // Successfully updated
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to set current weight.");
+            e.printStackTrace();
+        }
+        return false; // Return false if there is an error or the user does not exist
+    }
+
+    public int getHeight(String username) {
+        String sql = "SELECT height FROM users WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("height");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get height.");
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 

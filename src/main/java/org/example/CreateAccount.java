@@ -105,7 +105,7 @@ public class CreateAccount implements ActionListener {
             }
 
 
-            SQLiteConnection connection = new SQLiteConnection();
+            SQLiteConnection connection = SQLiteConnection.getInstance();
             // rewrite these first few lines and replace with database calls.
             for(String usernames : connection.getAllUsers()) {
                 if(usernames.equals(usernameText)) { 
@@ -116,8 +116,8 @@ public class CreateAccount implements ActionListener {
                     int convertedWeight = Integer.parseInt(weightText);
                     int convertedTargetWeight = Integer.parseInt(targetWeightText);                                                                            // the init and starting wieght will be the same upon account creation
                     User newUser = new User(firstNameText, lastNameText, usernameText, passwordText, convertedHeight, convertedWeight, convertedTargetWeight, convertedWeight);
-                    SQLiteConnection connect = new SQLiteConnection();
-                    connect.addUser(newUser);
+                    //SQLiteConnection connect = new SQLiteConnection();
+                    connection.addUser(newUser);
                 }
             }
             JOptionPane.showMessageDialog(frame, "Account created successfully!");

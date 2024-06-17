@@ -82,7 +82,7 @@ public class LoginPage implements ActionListener{
 			//
 			// if database contains this username
 			//
-			SQLiteConnection connect = new SQLiteConnection();
+			SQLiteConnection connect = SQLiteConnection.getInstance();
 
 
 			if(connect.containsUsername(userID)) {
@@ -92,7 +92,7 @@ public class LoginPage implements ActionListener{
 					messageLabel.setForeground(Color.green);
 					messageLabel.setText("Login successful");
 					frame.dispose();
-					HomePage welcomePage = new HomePage(userID);
+					HomePage welcomePage = new HomePage(userID,connect);
 				}
 				else {
 					messageLabel.setForeground(Color.red);
