@@ -10,14 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-
 public class HistoryPage extends Layout {
 
     public static double current;
     public static double prevCurrent;
     public static double target;
     public static double prevTarget;
-
 
     HistoryPage(String username, SQLiteConnection connection) {
 
@@ -31,12 +29,10 @@ public class HistoryPage extends Layout {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Retrieve the latest recorded values for weigh-in and target
-        double lastWeighIn = getLastWeighIn(username, connection);
-        double lastTarget = getLastTarget(username);
-
+        //double lastWeighIn = getLastWeighIn(username, connection);
+        //double lastTarget = getLastTarget(username);
 
         // Determine if the log should be for a weigh-in or a target change
-
         if(current == prevCurrent && target == prevTarget) {
             // do nothing
         } else if(current != prevCurrent) {

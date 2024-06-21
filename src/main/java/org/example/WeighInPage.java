@@ -54,7 +54,6 @@ public class WeighInPage extends Layout {
 
         if (e.getSource() == userSubmit) {
             try {
-                // need to figure out how to get this over to History
                 double oldCurrent = connection.getCurrentWeight(currentUser.getLoggedInUser());
                 double currentWeighIn = Double.parseDouble(userInput.getText());
                 //
@@ -74,7 +73,6 @@ public class WeighInPage extends Layout {
         }
         if (e.getSource() == userSubmit2) {
             try {
-                // need to figure out how to get this over to History
                 double oldTarget = connection.getTargetWeight((currentUser.getLoggedInUser()));
                 double newTargetWeight = Double.parseDouble(userInput2.getText());
                 //
@@ -88,6 +86,16 @@ public class WeighInPage extends Layout {
                 } else {
                     System.out.println("Failed to update target weight.");
                 }
+                //
+                // have to update the starting weight
+                connection.setStartWeight(currentUser.getLoggedInUser(), HistoryPage.current);
+                //
+                if(connection.setStartWeight(currentUser.getLoggedInUser(), HistoryPage.current)) {
+                    System.out.println("Start weight updated successfully.");
+                } else {
+                    System.out.println("Failed to update start weight.");
+                }
+
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid input. Please enter a valid number.");
             }

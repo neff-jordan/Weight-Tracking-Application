@@ -196,6 +196,23 @@ public class SQLiteConnection {
         return -1; // Return -1 if there is an error or the user does not exist
     }
 
+    public boolean setStartWeight(String username, double newStart) {
+        String sql = "UPDATE users SET startWeight = ? WHERE username = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setDouble(1, newStart);
+            statement.setString(2, username);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                return true; // Successfully updated
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to set current weight.");
+            e.printStackTrace();
+        }
+        return false; // Return false if there is an error or the user does not exist
+    }
+
     public int getCurrentWeight(String username) {
         String sql = "SELECT weight FROM users WHERE username = ?";
         try {
