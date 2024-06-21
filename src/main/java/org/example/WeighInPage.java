@@ -11,6 +11,8 @@ public class WeighInPage extends Layout {
     private JButton userSubmit2 = new JButton("Enter");
     private JTextArea userInput = new JTextArea();
     private JTextArea userInput2 = new JTextArea();
+    //protected SQLiteConnection connection;
+
 
     public WeighInPage(String userID, SQLiteConnection connection) {
 
@@ -52,7 +54,13 @@ public class WeighInPage extends Layout {
 
         if (e.getSource() == userSubmit) {
             try {
+                // need to figure out how to get this over to History
+                double oldCurrent = connection.getCurrentWeight(currentUser.getLoggedInUser());
                 double currentWeighIn = Double.parseDouble(userInput.getText());
+                //
+                HistoryPage.prevCurrent = oldCurrent;
+                HistoryPage.current = currentWeighIn;
+                //
                 System.out.println("Current Weigh-In: " + currentWeighIn);
                 // Update database with new current weight
                 if (connection.setCurrentWeight(currentUser.getLoggedInUser(), currentWeighIn)) {
@@ -66,7 +74,13 @@ public class WeighInPage extends Layout {
         }
         if (e.getSource() == userSubmit2) {
             try {
+                // need to figure out how to get this over to History
+                double oldTarget = connection.getTargetWeight((currentUser.getLoggedInUser()));
                 double newTargetWeight = Double.parseDouble(userInput2.getText());
+                //
+                HistoryPage.prevTarget = oldTarget;
+                HistoryPage.target = newTargetWeight;
+                //
                 System.out.println("New Target Weight: " + newTargetWeight);
                 // Update database with new target weight
                 if (connection.setTargetWeight(currentUser.getLoggedInUser(), newTargetWeight)) {

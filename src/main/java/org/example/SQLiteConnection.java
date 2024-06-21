@@ -1,10 +1,7 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +33,9 @@ public class SQLiteConnection {
         return connection;
     }
 
-
+    //////////////////////////////////////////////////////////////////////
+    // for users table which interfaces with most classes
+    //////////////////////////////////////////////////////////////////////
 
     // CREATE operation
     public void addUser(User user) {
@@ -281,4 +280,61 @@ public class SQLiteConnection {
     }
 
 
+    //////////////////////////////////////////////////////////////////////
+    // for user_history table which interfaces with the HistoryPage class
+    //////////////////////////////////////////////////////////////////////
+
+
+    public void logUserChange(String username, String changeType, double oldValue, double newValue) {
+        String sql = "INSERT INTO user_history(username, change_type, old_value, new_value) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            statement.setString(2, changeType);
+            statement.setDouble(3, oldValue);
+            statement.setDouble(4, newValue);
+            statement.executeUpdate();
+            System.out.println("User change logged successfully.");
+        } catch (SQLException e) {
+            System.out.println("Failed to log user change.");
+            e.printStackTrace();
+        }
+    }
+
+    public List<String> getUserChangeHistory(String username) {
+        List<String> history = new ArrayList<>();
+        String sql = "SELECT change_type, old_value, new_value, change_date FROM user_history WHERE username = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+            while (resultSet.next()) {
+                String changeType = resultSet.getString("change_type");
+                double oldValue = resultSet.getDouble("old_value");
+                double newValue = resultSet.getDouble("new_value");
+                Timestamp changeDate = resultSet.getTimestamp("change_date");
+                String formattedDate = dateFormat.format(changeDate);
+                history.add(String.format("Change Type: %s | Old: %.1f | New: %.1f | Date: %s",
+                        changeType, oldValue, newValue, formattedDate));
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get user change history.");
+            e.printStackTrace();
+        }
+        return history;
+    }
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
