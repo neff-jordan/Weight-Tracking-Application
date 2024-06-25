@@ -1,39 +1,39 @@
 package org.example;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class LoginPage implements ActionListener{
+public class LoginPage extends Layout implements ActionListener {
 
-	JFrame frame = new JFrame();
-	JButton loginButton = new JButton("Login");
-	JButton createButton = new JButton("Create Account");
-	JButton resetButton = new JButton("Reset");
-	JTextField userIDField = new JTextField();
-	JPasswordField userPasswordField = new JPasswordField();
-	JLabel userIDLabel = new JLabel("username:");
-	JLabel userPasswordLabel = new JLabel("password:");
-	JLabel messageLabel = new JLabel();
-	HashMap<String,String> logininfo = new HashMap<String,String>();
-
-	LoginPage(){
-		//HashMap<String,String> loginInfoOriginal (was in the parameter)
-		//logininfo = loginInfoOriginal;
-
-		userIDLabel.setBounds(113,170,75,25);			/////////
-		userPasswordLabel.setBounds(113,220,75,25);	/////////
-
-		messageLabel.setBounds(125,250,250,35);
-		messageLabel.setFont(new Font(null,Font.ITALIC,25));
-
-		userIDField.setBounds(188,170,200,25);			/////////
-		userPasswordField.setBounds(188,220,200,25);	/////////
+	private JTextField userIDField = new JTextField();
+	private JPasswordField userPasswordField = new JPasswordField();
+	private JLabel userIDLabel = new JLabel("username:");
+	private JLabel userPasswordLabel = new JLabel("password:");
+	private JLabel messageLabel = new JLabel();
+	private JButton loginButton = new JButton("Login");
+	private JButton createButton = new JButton("Create Account");
+	private JButton resetButton = new JButton("Reset");
+	SQLiteConnection connection = SQLiteConnection.getInstance();
 
 
-		loginButton.setBounds(65,320,125,50);
-		createButton.setBounds(195,320,125,50);
-		resetButton.setBounds(325,320,125,50);
+	public LoginPage(CardLayout cardLayout, JPanel cardPanel, SQLiteConnection connection) {
+		super(cardLayout, cardPanel);
+		this.connection = connection;
+
+		// Set layout to null for absolute positioning
+		this.setLayout(null);
+
+		userIDLabel.setBounds(113, 170, 75, 25);
+		userPasswordLabel.setBounds(113, 220, 75, 25);
+		messageLabel.setBounds(125, 250, 250, 35);
+		messageLabel.setFont(new Font(null, Font.ITALIC, 25));
+		userIDField.setBounds(188, 170, 200, 25);
+		userPasswordField.setBounds(188, 220, 200, 25);
+		loginButton.setBounds(65, 320, 125, 50);
+		createButton.setBounds(195, 320, 125, 50);
+		resetButton.setBounds(325, 320, 125, 50);
 
 		loginButton.setFocusable(false);
 		createButton.setFocusable(false);
@@ -43,67 +43,69 @@ public class LoginPage implements ActionListener{
 		createButton.addActionListener(this);
 		resetButton.addActionListener(this);
 
-		frame.add(userIDLabel);
-		frame.add(userPasswordLabel);
-		frame.add(messageLabel);
-		frame.add(userIDField);
-		frame.add(userPasswordField);
-		frame.add(loginButton);
-		frame.add(resetButton);
-		frame.add(createButton);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(520, 640);
-		frame.setMinimumSize(new Dimension(520, 640));
-		frame.setMaximumSize(new Dimension(520, 640));
-		frame.setLayout(null);
-		frame.setTitle("Login");
-		frame.setVisible(true);
-
+		this.add(userIDLabel);
+		this.add(userPasswordLabel);
+		this.add(messageLabel);
+		this.add(userIDField);
+		this.add(userPasswordField);
+		this.add(loginButton);
+		this.add(createButton);
+		this.add(resetButton);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		if(e.getSource()==resetButton) {
+		if (e.getSource() == resetButton) {
 			userIDField.setText("");
 			userPasswordField.setText("");
 		}
 
-		if(e.getSource()==createButton) {
-			CreateAccount newAccount = new CreateAccount();
-			frame.dispose();
+		if (e.getSource() == createButton) {
+			cardLayout.show(cardPanel, "Create Account");
 		}
 
-		if(e.getSource()==loginButton) {
-
+		if (e.getSource() == loginButton) {
 			String userID = userIDField.getText();
 			String password = String.valueOf(userPasswordField.getPassword());
 
-			//
-			// if database contains this username
-			//
 			SQLiteConnection connect = SQLiteConnection.getInstance();
 
-
-			if(connect.containsUsername(userID)) {
-				if(connect.getPassword(userID).equals(password)) {
-					// call a method here and put in the successful login info so i can access the username
-					CurrentUser.setInstance(userID);					//
+			if (connect.containsUsername(userID)) {
+				if (connect.getPassword(userID).equals(password)) {
+					CurrentUser.setInstance(userID);
 					messageLabel.setForeground(Color.green);
 					messageLabel.setText("Login successful");
-					frame.dispose();
-					HomePage welcomePage = new HomePage(userID,connect);
-				}
-				else {
+
+					// Switch to HomePage
+					HomePage homePage = new HomePage(cardLayout, cardPanel, userID, connection);
+					cardPanel.add(homePage, "Home");
+					//cardLayout.show(cardPanel, "Home");
+
+					CurrentUser currentUser = CurrentUser.getInstance();
+					WeighInPage weighInPage = new WeighInPage(cardLayout,cardPanel,currentUser.getLoggedInUser(),connection);
+					GraphPage graphPage = new GraphPage(cardLayout,cardPanel,currentUser.getLoggedInUser(), connection);
+					HistoryPage historyPage = new HistoryPage(cardLayout,cardPanel,currentUser.getLoggedInUser(),connection);
+
+					cardPanel.add(weighInPage,"Weigh-In");
+					cardPanel.add(graphPage, "Graph");
+					cardPanel.add(historyPage,"History");
+
+					switchToCard("Home");
+
+				} else {
 					messageLabel.setForeground(Color.red);
 					messageLabel.setText("Wrong password");
 				}
-
-			}
-			else {
+			} else {
 				messageLabel.setForeground(Color.red);
-				messageLabel.setText("username not found");
+				messageLabel.setText("Username not found");
 			}
 		}
 	}
+	public void switchToCard(String cardName) {
+		cardLayout.show(cardPanel, cardName);
+		cardPanel.revalidate();
+		cardPanel.repaint();
+	}
+
 }

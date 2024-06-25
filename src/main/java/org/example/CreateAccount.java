@@ -1,131 +1,120 @@
 package org.example;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CreateAccount implements ActionListener {
-    
-    JFrame frame = new JFrame();
+public class CreateAccount extends Layout implements ActionListener {
 
-    JLabel firstname = new JLabel("firstname: ");
-    JLabel lastname = new JLabel("lastname: ");
-    JLabel username = new JLabel("username: ");
-    JLabel password = new JLabel("password: ");
-    JLabel height = new JLabel("height (inches): ");
-    JLabel weight = new JLabel("weight (lbs): ");
-    JLabel targetWeight = new JLabel("target weight (lbs): ");
-    //JLabel startWeight = new JLabel("starting (lbs): ");
+    private JTextField first = new JTextField();
+    private JTextField last = new JTextField();
+    private JTextField user = new JTextField();
+    private JPasswordField pass = new JPasswordField();
+    private JTextField inches = new JTextField();
+    private JTextField lbs = new JTextField();
+    private JTextField target = new JTextField();
 
-    JTextField first = new JTextField();
-    JTextField last = new JTextField();
-    JTextField user = new JTextField();
-    JPasswordField pass = new JPasswordField(); 
-    JTextField inches = new JTextField();
-    JTextField lbs = new JTextField();
-    JTextField target = new JTextField();
-    //JTextField start = new JTextField();
+    private JLabel firstname = new JLabel("firstname: ");
+    private JLabel lastname = new JLabel("lastname: ");
+    private JLabel username = new JLabel("username: ");
+    private JLabel password = new JLabel("password: ");
+    private JLabel height = new JLabel("height (inches): ");
+    private JLabel weight = new JLabel("weight (lbs): ");
+    private JLabel targetWeight = new JLabel("target weight (lbs): ");
+
+    private JButton submit = new JButton("Submit");
+    private JButton back = new JButton("Back");
+    SQLiteConnection connection = SQLiteConnection.getInstance();
 
 
-    JButton submit = new JButton("submit");
-    JButton back = new JButton("back");
+    public CreateAccount(CardLayout cardLayout, JPanel cardPanel, SQLiteConnection connection) {
+        super(cardLayout, cardPanel);
+        this.connection = connection;
 
-    CreateAccount() { 
+        this.setLayout(null);
 
         firstname.setBounds(98, 50, 100, 25);
         lastname.setBounds(98, 100, 100, 25);
         username.setBounds(98, 150, 100, 25);
-        password.setBounds(98, 200, 100, 25); 
+        password.setBounds(98, 200, 100, 25);
         height.setBounds(98, 250, 120, 25);
         weight.setBounds(98, 300, 120, 25);
-        targetWeight.setBounds(98,350,120,25);
+        targetWeight.setBounds(98, 350, 120, 25);
 
         first.setBounds(223, 50, 200, 25);
         last.setBounds(223, 100, 200, 25);
         user.setBounds(223, 150, 200, 25);
-        pass.setBounds(223, 200, 200, 25); 
+        pass.setBounds(223, 200, 200, 25);
         inches.setBounds(223, 250, 200, 25);
         lbs.setBounds(223, 300, 200, 25);
-        target.setBounds(223,350,200,25);
+        target.setBounds(223, 350, 200, 25);
 
         submit.setBounds(210, 450, 100, 25);
         submit.addActionListener(this);
-        back.setBounds(210,400,100,25);
+        back.setBounds(210, 400, 100, 25);
         back.addActionListener(this);
 
-        frame.add(firstname);
-        frame.add(lastname);
-        frame.add(username);
-        frame.add(password); 
-        frame.add(height);
-        frame.add(weight);
-        frame.add(targetWeight);
-        frame.add(first);
-        frame.add(last);
-        frame.add(user);
-        frame.add(pass); 
-        frame.add(inches);
-        frame.add(lbs);
-        frame.add(target);
-        frame.add(submit);
-        frame.add(back);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(520, 640);
-		frame.setMinimumSize(new Dimension(520, 640));
-        frame.setMaximumSize(new Dimension(520, 640));
-        frame.setLayout(null);
-        frame.setTitle("Create Account");
-        frame.setVisible(true);
+        this.add(firstname);
+        this.add(lastname);
+        this.add(username);
+        this.add(password);
+        this.add(height);
+        this.add(weight);
+        this.add(targetWeight);
+        this.add(first);
+        this.add(last);
+        this.add(user);
+        this.add(pass);
+        this.add(inches);
+        this.add(lbs);
+        this.add(target);
+        this.add(submit);
+        this.add(back);
     }
 
-    public void actionPerformed(ActionEvent e) { 
-
-        if(e.getSource()==back) {
-            frame.dispose();
-            LoginPage goBackToLogin = new LoginPage();
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == back) {
+            cardLayout.show(cardPanel, "Login");
         }
 
-        if(e.getSource()==submit) { 
-
-            // check to see if the fields are filled
+        if (e.getSource() == submit) {
+            // Check to see if the fields are filled
             String firstNameText = first.getText();
             String lastNameText = last.getText();
             String usernameText = user.getText();
-            String heightText = inches.getText();   // needs exception check here to make sure the input is a number
-            String weightText = lbs.getText();      // needs exception check here to make sure the input is a number
+            String heightText = inches.getText();   // Needs exception check here to make sure the input is a number
+            String weightText = lbs.getText();      // Needs exception check here to make sure the input is a number
             String passwordText = new String(pass.getPassword());
             String targetWeightText = target.getText();
 
             if (firstNameText.isEmpty() || lastNameText.isEmpty() || usernameText.isEmpty() || heightText.isEmpty() || weightText.isEmpty() || passwordText.isEmpty()) {
-
-                JOptionPane.showMessageDialog(frame, "Please fill in all fields.");
+                JOptionPane.showMessageDialog(this, "Please fill in all fields.");
                 return;
             }
 
+            try {
+                int convertedHeight = Integer.parseInt(heightText);
+                int convertedWeight = Integer.parseInt(weightText);
+                int convertedTargetWeight = Integer.parseInt(targetWeightText);
 
-            SQLiteConnection connection = SQLiteConnection.getInstance();
-            // rewrite these first few lines and replace with database calls.
-            for(String usernames : connection.getAllUsers()) {
-                if(usernames.equals(usernameText)) { 
-                    JOptionPane.showMessageDialog(frame, "Error! Username already taken.");
-                    return;
-                } else {
-                    int convertedHeight = Integer.parseInt(heightText);
-                    int convertedWeight = Integer.parseInt(weightText);
-                    int convertedTargetWeight = Integer.parseInt(targetWeightText);                                                                            // the init and starting wieght will be the same upon account creation
-                    User newUser = new User(firstNameText, lastNameText, usernameText, passwordText, convertedHeight, convertedWeight, convertedTargetWeight, convertedWeight);
-                    //SQLiteConnection connect = new SQLiteConnection();
-                    connection.addUser(newUser);
+                SQLiteConnection connection = SQLiteConnection.getInstance();
+                for (String usernames : connection.getAllUsers()) {
+                    if (usernames.equals(usernameText)) {
+                        JOptionPane.showMessageDialog(this, "Error! Username already taken.");
+                        return;
+                    }
                 }
+
+                User newUser = new User(firstNameText, lastNameText, usernameText, passwordText, convertedHeight, convertedWeight, convertedTargetWeight, convertedWeight);
+                connection.addUser(newUser);
+
+                JOptionPane.showMessageDialog(this, "Account created successfully!");
+                cardLayout.show(cardPanel, "Login");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Height, weight, and target weight must be numbers.");
             }
-            JOptionPane.showMessageDialog(frame, "Account created successfully!");
-            frame.dispose();
-            LoginPage goBackToLogin = new LoginPage();
         }
     }
-
-    //public static void main(String[] args) { SwingUtilities.invokeLater(() -> { new CreateAccount();});}
-    
 }

@@ -2,8 +2,10 @@ package org.example;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-public class HomePage extends Layout {
+public class HomePage extends Layout implements ComponentListener {
 
 	//SQLiteConnection connection = new SQLiteConnection();
 	CurrentUser currentUser = CurrentUser.getInstance();
@@ -11,22 +13,27 @@ public class HomePage extends Layout {
     JLabel currentLabel = new JLabel("Current Weight");
     JLabel targetLabel = new JLabel("Target Weight");
 
+	private JLabel startNumLabel;
+	private JLabel currentNumLabel;
+	private JLabel targetNumLabel;
+	private JProgressBar weightProgress;
+	private JLabel bmi;
 
 
-    HomePage(String userID, SQLiteConnection connection) {
+    HomePage(CardLayout cardLayout, JPanel cardPanel, String userID, SQLiteConnection connection) {
 
-		super();
+		super(cardLayout, cardPanel);
 
-		JLabel startNumLabel = new JLabel("" + connection.getStartWeight(currentUser.getLoggedInUser()));
-		JLabel currentNumLabel = new JLabel("" + connection.getCurrentWeight(currentUser.getLoggedInUser()));
-		JLabel targetNumLabel = new JLabel("" + connection.getTargetWeight(currentUser.getLoggedInUser()));
+		startNumLabel = new JLabel("" + connection.getStartWeight(currentUser.getLoggedInUser()));
+		currentNumLabel = new JLabel("" + connection.getCurrentWeight(currentUser.getLoggedInUser()));
+		targetNumLabel = new JLabel("" + connection.getTargetWeight(currentUser.getLoggedInUser()));
 
 		////////////////////////////////////
 		// need a second container to store the content below the nav bar 
 		////////////////////////////////////
 
 		JPanel abstractContainer = new JPanel(new BorderLayout());
-		frame.add(abstractContainer, BorderLayout.CENTER);
+		this.add(abstractContainer, BorderLayout.CENTER);
 
         JPanel progressPanel = new JPanel(new GridLayout(2, 3)); 
 
@@ -61,7 +68,7 @@ public class HomePage extends Layout {
 
 		// Create a new panel for the progress bar and its title
 		JPanel progressBarPanel = new JPanel(new BorderLayout());
-		JProgressBar weightProgress = new JProgressBar(0,100);
+		weightProgress = new JProgressBar(0,100);
 
 		//
 		// how to show percentage gained
@@ -99,19 +106,52 @@ public class HomePage extends Layout {
 
 		// Format BMI to one decimal place
 		String formattedBMI = String.format("%.1f", BMIans);
-		JLabel bmi = new JLabel("Your BMI score is " + formattedBMI + " | Weight Classification = " + classification, SwingConstants.CENTER);
+		bmi = new JLabel("Your BMI score is " + formattedBMI + " | Weight Classification = " + classification, SwingConstants.CENTER);
 
 
 
-		frame.add(bmi, BorderLayout.SOUTH);
+		this.add(bmi, BorderLayout.SOUTH);
 
 		// add spacing
 		JLabel lspace = new JLabel("        ");
 		JLabel rspace = new JLabel("        ");
-		frame.add(lspace, BorderLayout.WEST);
-		frame.add(rspace, BorderLayout.EAST);
+		this.add(lspace, BorderLayout.WEST);
+		this.add(rspace, BorderLayout.EAST);
+
+		this.addComponentListener(this);
 
     }
+
+	public void componentShown(ComponentEvent e) {
+		// Refresh data here
+		CurrentUser currentUser = CurrentUser.getInstance();
+		startNumLabel.setText("" + connection.getStartWeight(currentUser.getLoggedInUser()));
+		currentNumLabel.setText("" + connection.getCurrentWeight(currentUser.getLoggedInUser()));
+		targetNumLabel.setText("" + connection.getTargetWeight(currentUser.getLoggedInUser()));
+
+		// Recalculate progress bar value
+		double starting = connection.getStartWeight(currentUser.getLoggedInUser());
+		double current = connection.getCurrentWeight(currentUser.getLoggedInUser());
+		double target = connection.getTargetWeight(currentUser.getLoggedInUser());
+
+		double denom = target - starting;
+		double numer = current - starting;
+		double percentage = (numer / denom) * 100;
+
+		weightProgress.setValue((int) percentage);
+
+		// Recalculate BMI
+		double BMIans = 703 * (current / Math.pow(connection.getHeight(currentUser.getLoggedInUser()), 2));
+		String classification = bmiClassification(BMIans);
+		String formattedBMI = String.format("%.1f", BMIans);
+		bmi.setText("Your BMI score is " + formattedBMI + " | Weight Classification = " + classification);
+	}
+
+
+	public void componentHidden(ComponentEvent e) {}
+	public void componentMoved(ComponentEvent e) {}
+	public void componentResized(ComponentEvent e) {}
+
 
 	// set up action listener 
 	public void actionPerformed(ActionEvent e) {
@@ -131,5 +171,6 @@ public class HomePage extends Layout {
 		return ans;
 	}
 
-	 
+
+
 }

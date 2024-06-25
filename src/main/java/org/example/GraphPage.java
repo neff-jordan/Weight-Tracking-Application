@@ -14,45 +14,30 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphPage extends Layout {
+public class GraphPage extends Layout implements ComponentListener {
 
     private SQLiteConnection connection;
+    private String username;
+    private JPanel abstractPanel;
+    private ChartPanel chartPanel;
 
-    GraphPage(String username, SQLiteConnection connection) {
-
-        super();
+    GraphPage(CardLayout cardLayout, JPanel cardPanel, String username, SQLiteConnection connection) {
+        super(cardLayout, cardPanel);
+        this.username = username;
         this.connection = connection;
-        JPanel abstractPanel = new JPanel(new BorderLayout());
-        frame.add(abstractPanel, BorderLayout.CENTER);
 
-        // Fetch user weigh-in data
-        List<Point> points = getWeighInData(username);
+        abstractPanel = new JPanel(new BorderLayout());
+        this.add(abstractPanel, BorderLayout.CENTER);
 
-        // Create the scatter plot
-        JFreeChart scatterPlot = createChart(points);
-
-        // Create and set up the panel
-        ChartPanel chartPanel = new ChartPanel(scatterPlot);
-        chartPanel.setPreferredSize(new Dimension(600, 400));
-        chartPanel.setMouseWheelEnabled(true);
-
-
-
-        abstractPanel.add(chartPanel, BorderLayout.CENTER);
-
-        // Add spacing
-        //JLabel lspace = new JLabel("        ");
-        //JLabel rspace = new JLabel("        ");
-        JLabel TOP = new JLabel("\n\n");
-        abstractPanel.add(TOP, BorderLayout.NORTH);
-        //abstractPanel.add(lspace, BorderLayout.WEST);
-        //abstractPanel.add(rspace, BorderLayout.EAST);
+        this.addComponentListener(this);
     }
 
     private List<Point> getWeighInData(String username) {
@@ -98,21 +83,44 @@ public class GraphPage extends Layout {
         renderer.setSeriesLinesVisible(0, false);
         renderer.setSeriesShapesVisible(0, true);
 
-        ///////////////////////////////////////////////////////////////////////////////
-        // This is a temporary fix to hide the x-axis tick labels till I figure out
-        // how to make it list the weeks/days properly
+        // Temporary fix to hide the x-axis tick labels
         ValueAxis domainAxis = plot.getDomainAxis();
         if (domainAxis instanceof NumberAxis) {
             NumberAxis numberAxis = (NumberAxis) domainAxis;
             numberAxis.setTickLabelsVisible(false); // Hide the x-axis tick labels
         }
-        ///////////////////////////////////////////////////////////////////////////////
 
         return chart;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
+    private void refreshGraph() {
+        List<Point> points = getWeighInData(username);
+        JFreeChart scatterPlot = createChart(points);
+
+        if (chartPanel != null) {
+            abstractPanel.remove(chartPanel);
+        }
+
+        chartPanel = new ChartPanel(scatterPlot);
+        chartPanel.setPreferredSize(new Dimension(600, 400));
+        chartPanel.setMouseWheelEnabled(true);
+        abstractPanel.add(chartPanel, BorderLayout.CENTER);
+
+        abstractPanel.revalidate();
+        abstractPanel.repaint();
     }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        refreshGraph();
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {}
+
+    @Override
+    public void componentMoved(ComponentEvent e) {}
+
+    @Override
+    public void componentResized(ComponentEvent e) {}
 }

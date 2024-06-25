@@ -11,16 +11,16 @@ public class WeighInPage extends Layout {
     private JButton userSubmit2 = new JButton("Enter");
     private JTextArea userInput = new JTextArea();
     private JTextArea userInput2 = new JTextArea();
-    //protected SQLiteConnection connection;
+    SQLiteConnection connection = SQLiteConnection.getInstance();
 
 
-    public WeighInPage(String userID, SQLiteConnection connection) {
+    public WeighInPage(CardLayout cardLayout, JPanel cardPanel, String userID, SQLiteConnection connection) {
 
-        super();  // Pass the connection to the parent class
+        super(cardLayout, cardPanel);  // Pass the connection to the parent class
         this.connection = connection;
 
         JPanel abstractContainer = new JPanel(new BorderLayout());
-        frame.add(abstractContainer, BorderLayout.CENTER);
+        this.add(abstractContainer, BorderLayout.CENTER);
 
         JPanel top = new JPanel(new BorderLayout());
         JPanel bot = new JPanel(new BorderLayout());
@@ -40,8 +40,8 @@ public class WeighInPage extends Layout {
         // Add spacing
         JLabel lspace = new JLabel("        ");
         JLabel rspace = new JLabel("        ");
-        frame.add(lspace, BorderLayout.WEST);
-        frame.add(rspace, BorderLayout.EAST);
+        this.add(lspace, BorderLayout.WEST);
+        this.add(rspace, BorderLayout.EAST);
 
         userSubmit.addActionListener(this);
         userSubmit2.addActionListener(this);
@@ -67,6 +67,10 @@ public class WeighInPage extends Layout {
                 } else {
                     System.out.println("Failed to update current weight.");
                 }
+
+                // reset the input box
+                userInput.setText("");
+
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid input. Please enter a valid number.");
             }
@@ -95,6 +99,9 @@ public class WeighInPage extends Layout {
                 } else {
                     System.out.println("Failed to update start weight.");
                 }
+
+                // reset the input box
+                userInput2.setText("");
 
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid input. Please enter a valid number.");
