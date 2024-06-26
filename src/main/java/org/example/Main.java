@@ -1,11 +1,18 @@
 package org.example;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
         SwingUtilities.invokeLater(() -> {
+
+            FlatLightLaf.setup();
+
             JFrame frame = new JFrame("Weight Tracker");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(520, 640);

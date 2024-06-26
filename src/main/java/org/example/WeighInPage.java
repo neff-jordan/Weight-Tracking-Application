@@ -15,27 +15,59 @@ public class WeighInPage extends Layout {
 
 
     public WeighInPage(CardLayout cardLayout, JPanel cardPanel, String userID, SQLiteConnection connection) {
-
         super(cardLayout, cardPanel);  // Pass the connection to the parent class
         this.connection = connection;
 
-        JPanel abstractContainer = new JPanel(new BorderLayout());
-        this.add(abstractContainer, BorderLayout.CENTER);
+        // Create a spacer panel with BorderLayout
+        JPanel spacer = new JPanel(new BorderLayout());
 
-        JPanel top = new JPanel(new BorderLayout());
-        JPanel bot = new JPanel(new BorderLayout());
-        abstractContainer.add(top, BorderLayout.NORTH);
-        abstractContainer.add(bot, BorderLayout.CENTER);
+        // Create the main container with BoxLayout for vertical alignment
+        JPanel abstractContainer = new JPanel();
+        abstractContainer.setLayout(new BoxLayout(abstractContainer, BoxLayout.Y_AXIS));
+        spacer.add(abstractContainer, BorderLayout.CENTER);
+
+        // Add vertical space
+        JLabel spaces = new JLabel("\n\n\n\n\n\n\n");
+        spacer.add(spaces, BorderLayout.NORTH);
+        this.add(spacer, BorderLayout.CENTER);
+
+        // Create panels for each section and add them to the abstractContainer
+        JPanel currentWeightPanel = new JPanel();
+        currentWeightPanel.setLayout(new BoxLayout(currentWeightPanel, BoxLayout.Y_AXIS));
+        JPanel targetWeightPanel = new JPanel();
+        targetWeightPanel.setLayout(new BoxLayout(targetWeightPanel, BoxLayout.Y_AXIS));
+
+        abstractContainer.add(currentWeightPanel);
+        abstractContainer.add(Box.createVerticalStrut(20));  // Add spacing between panels
+        abstractContainer.add(targetWeightPanel);
+
+
 
         JLabel currentWeight = new JLabel("Enter Current Weight: ", SwingConstants.CENTER);
-        top.add(currentWeight, BorderLayout.NORTH);
-        top.add(userInput, BorderLayout.CENTER);
-        top.add(userSubmit, BorderLayout.SOUTH);
+        currentWeight.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align the label
+        currentWeightPanel.add(currentWeight);
+        currentWeightPanel.add(Box.createVerticalStrut(10));  // Add spacing between components
+
+        userInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, 75));  // Increase height
+        userInput.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align the text area
+        currentWeightPanel.add(userInput);
+        currentWeightPanel.add(Box.createVerticalStrut(10));  // Add spacing between components
+
+        userSubmit.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align the button
+        currentWeightPanel.add(userSubmit);
 
         JLabel targetWeight = new JLabel("Enter New Target Weight: ", SwingConstants.CENTER);
-        bot.add(targetWeight, BorderLayout.NORTH);
-        bot.add(userInput2, BorderLayout.CENTER);
-        bot.add(userSubmit2, BorderLayout.SOUTH);
+        targetWeight.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align the label
+        targetWeightPanel.add(targetWeight);
+        targetWeightPanel.add(Box.createVerticalStrut(10));  // Add spacing between components
+
+        userInput2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 75));  // Increase height
+        userInput2.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align the text area
+        targetWeightPanel.add(userInput2);
+        targetWeightPanel.add(Box.createVerticalStrut(10));  // Add spacing between components
+
+        userSubmit2.setAlignmentX(Component.CENTER_ALIGNMENT);  // Center align the button
+        targetWeightPanel.add(userSubmit2);
 
         // Add spacing
         JLabel lspace = new JLabel("        ");
