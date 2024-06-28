@@ -1,12 +1,15 @@
 package org.example;
 
 import com.formdev.flatlaf.FlatLightLaf;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
+
+
+        // total project lines of code = ~1400
+        // medium-sized project
 
 
         SwingUtilities.invokeLater(() -> {

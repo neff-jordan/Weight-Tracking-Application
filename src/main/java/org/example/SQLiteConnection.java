@@ -8,7 +8,7 @@ import java.util.List;
 public class SQLiteConnection {
     private static SQLiteConnection instance;
     private Connection connection;
-    private String url = "jdbc:sqlite:/Users/jordanneff/Desktop/Projects/Weight-Tracking-Application/src/main/resources/mydatabase.db"; // Replace with the path to your SQLite database file
+    private String url = "jdbc:sqlite:src/main/resources/mydatabase.db";
 
 
     private SQLiteConnection() {
@@ -339,10 +339,6 @@ public class SQLiteConnection {
         }
         return history;
     }
-
-
-
-
 }
 
 
