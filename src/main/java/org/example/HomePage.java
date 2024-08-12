@@ -1,3 +1,9 @@
+/**
+ * The HomePage class is responsible for displaying the user's weight-related information
+ * including starting weight, current weight, target weight, and BMI. It also displays
+ * a progress bar showing the user's progress towards their target weight.
+ */
+
 package org.example;
 
 import java.awt.*;
@@ -17,6 +23,15 @@ public class HomePage extends Layout implements ComponentListener {
 	private final JProgressBar weightProgress;
 	private final JLabel bmi;
 
+	/**
+	 * Constructor for the HomePage class.
+	 * Initializes the layout, sets up labels for weight and BMI, and creates a progress bar.
+	 *
+	 * @param cardLayout The CardLayout manager used for switching between different screens.
+	 * @param cardPanel The JPanel that holds the different screens.
+	 * @param userID The ID of the logged-in user.
+	 * @param connection The SQLiteConnection instance used to interact with the database.
+	 */
 	HomePage(CardLayout cardLayout, JPanel cardPanel, String userID, SQLiteConnection connection) {
 
 		super(cardLayout, cardPanel);
@@ -128,6 +143,11 @@ public class HomePage extends Layout implements ComponentListener {
 		this.addComponentListener(this);
 	}
 
+	/**
+	 * Called when the component is shown. Refreshes the weight values, progress bar, and BMI information.
+	 *
+	 * @param e The ComponentEvent associated with showing the component.
+	 */
 	public void componentShown(ComponentEvent e) {
 		CurrentUser currentUser = CurrentUser.getInstance();
 		startNumLabel.setText("" + connection.getStartWeight(currentUser.getLoggedInUser()));
@@ -150,16 +170,22 @@ public class HomePage extends Layout implements ComponentListener {
 		bmi.setText("Your BMI score is " + formattedBMI + " | Weight Classification = " + classification);
 	}
 
+	// Unused methods from the ComponentListener interface.
+	// These can be implemented if needed in the future.
 	public void componentHidden(ComponentEvent e) {}
-
 	public void componentMoved(ComponentEvent e) {}
-
 	public void componentResized(ComponentEvent e) {}
 
 	public void actionPerformed(ActionEvent e) {
 		super.actionPerformed(e);
 	}
 
+	/**
+	 * Classifies the BMI into categories such as underweight, normal weight, overweight, or obese.
+	 *
+	 * @param bmi The BMI value to be classified.
+	 * @return A string indicating the BMI classification.
+	 */
 	public static String bmiClassification(double bmi) {
 		String ans = "";
 		if (bmi < 18.5)

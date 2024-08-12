@@ -1,3 +1,25 @@
+/**
+ * Manages the connection to an SQLite database and provides methods for performing various database operations.
+ * This class follows the Singleton pattern to ensure that only one instance of the database connection exists throughout
+ * the application lifecycle. It provides functionalities for managing user data, including user creation, retrieval,
+ * updates, deletions, and tracking user changes.
+ *
+ * Key Responsibilities:
+ * - Establishing and maintaining a connection to the SQLite database.
+ * - Adding new users to the database with details such as first name, last name, username, and password.
+ * - Retrieving user information by username, including password, start weight, current weight, target weight, and height.
+ * - Updating existing user details in the database.
+ * - Deleting users from the database.
+ * - Checking if a username exists in the database.
+ * - Logging changes made to user data, such as weight updates, into a user history table.
+ * - Retrieving a history of changes for a specific user.
+ *
+ * Usage:
+ * - Obtain the single instance of this class using the `getInstance()` method.
+ * - Use the provided methods to interact with user data, including creating, updating, and deleting users.
+ * - Utilize methods for logging user changes and retrieving historical data.
+ */
+
 package org.example;
 
 import java.sql.*;

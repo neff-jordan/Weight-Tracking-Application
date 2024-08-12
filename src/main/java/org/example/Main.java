@@ -1,3 +1,8 @@
+/**
+ * The Main class is the entry point for the application.
+ * It sets up the main JFrame and initializes the user interface.
+ */
+
 package org.example;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -6,11 +11,6 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-
-
-        // total project lines of code = ~1400
-        // medium-sized project
-
 
         SwingUtilities.invokeLater(() -> {
 

@@ -1,3 +1,8 @@
+/**
+ * The LoginPage class handles the login interface of the application.
+ * It allows users to log in, create an account, or reset their login details.
+ */
+
 package org.example;
 
 import javax.swing.*;
@@ -17,7 +22,14 @@ public class LoginPage extends Layout implements ActionListener {
 	private JButton resetButton = new JButton("Reset");
 	SQLiteConnection connection = SQLiteConnection.getInstance();
 
-
+	/**
+	 * Constructor for the LoginPage class.
+	 * Sets up the user interface components and positions them on the screen.
+	 *
+	 * @param cardLayout The CardLayout manager used for switching between different screens.
+	 * @param cardPanel The JPanel that holds the different screens.
+	 * @param connection An instance of SQLiteConnection for database operations.
+	 */
 	public LoginPage(CardLayout cardLayout, JPanel cardPanel, SQLiteConnection connection) {
 		super(cardLayout, cardPanel);
 		this.connection = connection;

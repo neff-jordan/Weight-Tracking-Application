@@ -1,3 +1,11 @@
+/**
+ * This class represents a GUI panel for creating a new user account.
+ * It allows users to input their personal details including first name,
+ * last name, username, password, height, weight, and target weight.
+ * The class also handles form submission, including validation and
+ * interaction with the SQLite database.
+ */
+
 package org.example;
 
 import javax.swing.*;
@@ -28,6 +36,13 @@ public class CreateAccount extends Layout implements ActionListener {
     SQLiteConnection connection = SQLiteConnection.getInstance();
 
 
+    /**
+     * Constructor for the CreateAccount class.
+     *
+     * @param cardLayout  The CardLayout used to switch between different panels.
+     * @param cardPanel   The JPanel containing the different cards.
+     * @param connection  The SQLiteConnection instance for database interactions.
+     */
     public CreateAccount(CardLayout cardLayout, JPanel cardPanel, SQLiteConnection connection) {
         super(cardLayout, cardPanel);
         this.connection = connection;

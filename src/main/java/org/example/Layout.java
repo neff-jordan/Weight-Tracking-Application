@@ -1,3 +1,9 @@
+/**
+ * The Layout class serves as a base class for various screens in the application.
+ * It provides a consistent layout with navigation buttons and manages switching
+ * between different screens (cards) in the application.
+ */
+
 package org.example;
 
 import javax.security.auth.RefreshFailedException;
@@ -16,6 +22,13 @@ public abstract class Layout extends JPanel implements ActionListener {
     protected JPanel cardPanel;
     SQLiteConnection connection = SQLiteConnection.getInstance();
 
+    /**
+     * Constructor for the Layout class.
+     * Initializes the navigation buttons and sets up the layout.
+     *
+     * @param cardLayout The CardLayout manager used for switching between different screens.
+     * @param cardPanel The JPanel that holds the different screens.
+     */
     public Layout(CardLayout cardLayout, JPanel cardPanel) {
         this.cardLayout = cardLayout;
         this.cardPanel = cardPanel;
@@ -36,39 +49,40 @@ public abstract class Layout extends JPanel implements ActionListener {
         add(buttonsPanel, BorderLayout.NORTH);
     }
 
-    // Method to switch cards and repaint them
+    /**
+     * Switches the displayed card to the one specified by the cardName.
+     * This method refreshes the display after switching.
+     *
+     * @param cardName The name of the card to switch to.
+     * @throws RefreshFailedException If there is an error while refreshing the screen.
+     */
     protected void switchToCard(String cardName) throws RefreshFailedException {
         cardLayout.show(cardPanel, cardName);
         cardPanel.revalidate();
         cardPanel.repaint();
     }
 
+    /**
+     * Handles button clicks and switches to the corresponding screen (card).
+     *
+     * @param e The ActionEvent triggered by button clicks.
+     */
     @Override
     public void actionPerformed(ActionEvent e)  {
-        if (e.getSource() == homeButton) {
-            try {
+        try {
+            // Check which button was clicked and switch to the corresponding card
+            if (e.getSource() == homeButton) {
                 switchToCard("Home");
-            } catch (RefreshFailedException ex) {
-                throw new RuntimeException(ex);
-            }
-        } else if (e.getSource() == weighInButton) {
-            try {
+            } else if (e.getSource() == weighInButton) {
                 switchToCard("Weigh-In");
-            } catch (RefreshFailedException ex) {
-                throw new RuntimeException(ex);
-            }
-        } else if (e.getSource() == graphButton) {
-            try {
+            } else if (e.getSource() == graphButton) {
                 switchToCard("Graph");
-            } catch (RefreshFailedException ex) {
-                throw new RuntimeException(ex);
-            }
-        } else if (e.getSource() == historyButton) {
-            try {
+            } else if (e.getSource() == historyButton) {
                 switchToCard("History");
-            } catch (RefreshFailedException ex) {
-                throw new RuntimeException(ex);
             }
+        } catch (RefreshFailedException ex) {
+            // Handle the exception by wrapping it in a RuntimeException
+            throw new RuntimeException(ex);
         }
     }
 

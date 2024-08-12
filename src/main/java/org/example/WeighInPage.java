@@ -1,3 +1,9 @@
+/**
+ * Represents the weigh-in page in the application where users can update their current weight
+ * and target weight. This class extends the `Layout` class and uses Swing components to create
+ * a graphical user interface for interacting with the user's weight data.
+ */
+
 package org.example;
 
 import java.awt.*;
@@ -13,7 +19,14 @@ public class WeighInPage extends Layout {
     private JTextArea userInput2 = new JTextArea();
     SQLiteConnection connection = SQLiteConnection.getInstance();
 
-
+    /**
+     * Constructs the weigh-in page with specified layout and user information.
+     *
+     * @param cardLayout  The CardLayout instance used to switch between different pages.
+     * @param cardPanel   The JPanel that holds the different pages.
+     * @param userID      The ID of the logged-in user.
+     * @param connection  The SQLiteConnection instance for database operations.
+     */
     public WeighInPage(CardLayout cardLayout, JPanel cardPanel, String userID, SQLiteConnection connection) {
         super(cardLayout, cardPanel);  // Pass the connection to the parent class
         this.connection = connection;
@@ -79,6 +92,12 @@ public class WeighInPage extends Layout {
         userSubmit2.addActionListener(this);
     }
 
+    /**
+     * Handles action events for the buttons on the weigh-in page.
+     * Updates the user's current weight and target weight in the database based on button clicks.
+     *
+     * @param e The ActionEvent triggered by button clicks.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 

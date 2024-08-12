@@ -1,5 +1,9 @@
-package org.example;
+/**
+ * Represents a user in the weight tracking application.
+ * This class encapsulates user details including personal information, login credentials, and weight data.
+ */
 
+package org.example;
 
 public class User  {
     private String firstName;

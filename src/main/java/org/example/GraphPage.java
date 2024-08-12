@@ -1,3 +1,9 @@
+/**
+ * The GraphPage class is responsible for displaying a scatter plot of a user's weight progress over time.
+ * It extends the custom Layout class and implements ComponentListener to handle component events.
+ * This class retrieves data from the SQLite database and dynamically generates a chart using JFreeChart.
+ */
+
 package org.example;
 
 import org.jfree.chart.ChartFactory;
@@ -29,6 +35,15 @@ public class GraphPage extends Layout implements ComponentListener {
     private JPanel abstractPanel;
     private ChartPanel chartPanel;
 
+    /**
+     * Constructor for the GraphPage class.
+     * Initializes the layout and sets up the panel for displaying the graph.
+     *
+     * @param cardLayout The CardLayout manager used for switching between different screens.
+     * @param cardPanel The JPanel that holds the different screens.
+     * @param username The username of the logged-in user whose data will be displayed.
+     * @param connection The SQLiteConnection instance used to interact with the database.
+     */
     GraphPage(CardLayout cardLayout, JPanel cardPanel, String username, SQLiteConnection connection) {
         super(cardLayout, cardPanel);
         this.username = username;
@@ -93,6 +108,10 @@ public class GraphPage extends Layout implements ComponentListener {
         return chart;
     }
 
+    /**
+     * Refreshes the graph by fetching the latest data and updating the chart.
+     * This method is called whenever the GraphPage component is shown or needs to be updated.
+     */
     private void refreshGraph() {
         List<Point> points = getWeighInData(username);
         JFreeChart scatterPlot = createChart(points);
@@ -115,12 +134,12 @@ public class GraphPage extends Layout implements ComponentListener {
         refreshGraph();
     }
 
+    // Unused methods from the ComponentListener interface.
+    // These can be implemented if needed in the future.
     @Override
     public void componentHidden(ComponentEvent e) {}
-
     @Override
     public void componentMoved(ComponentEvent e) {}
-
     @Override
     public void componentResized(ComponentEvent e) {}
 }

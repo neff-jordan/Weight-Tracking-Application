@@ -1,3 +1,9 @@
+/**
+ * The HistoryPage class is responsible for displaying the user's weight history log.
+ * It extends the custom Layout class and implements ComponentListener to handle component events.
+ * The history log includes both weight changes and target changes.
+ */
+
 package org.example;
 
 import javax.swing.*;
@@ -20,6 +26,16 @@ public class HistoryPage extends Layout implements ComponentListener {
     private JScrollPane scroll;
     private SQLiteConnection connection = SQLiteConnection.getInstance();
 
+    /**
+     * Constructor for the HistoryPage class.
+     * Initializes the layout, sets up the scrollable panel for displaying history logs,
+     * and adds component listeners.
+     *
+     * @param cardLayout The CardLayout manager used for switching between different screens.
+     * @param cardPanel The JPanel that holds the different screens.
+     * @param username The username of the logged-in user whose history will be displayed.
+     * @param connection The SQLiteConnection instance used to interact with the database.
+     */
     HistoryPage(CardLayout cardLayout, JPanel cardPanel, String username, SQLiteConnection connection) {
         super(cardLayout, cardPanel);
         this.username = username;
@@ -75,6 +91,11 @@ public class HistoryPage extends Layout implements ComponentListener {
         return -1; // Return a default value or handle appropriately
     }
 
+    /**
+     * Refreshes the history log displayed in the panel.
+     * This method checks if the current weight or target has changed,
+     * logs the change to the database if necessary, and updates the history log entries.
+     */
     private void refreshHistory() {
         panel.removeAll();
 
@@ -105,12 +126,12 @@ public class HistoryPage extends Layout implements ComponentListener {
         refreshHistory();
     }
 
+    // Unused methods from the ComponentListener interface.
+    // These can be implemented if needed in the future.
     @Override
     public void componentHidden(ComponentEvent e) {}
-
     @Override
     public void componentMoved(ComponentEvent e) {}
-
     @Override
     public void componentResized(ComponentEvent e) {}
 }
