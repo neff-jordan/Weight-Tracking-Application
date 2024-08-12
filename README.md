@@ -1,15 +1,27 @@
 # Weight-Tracking-Application
 
-known bugs: 
+## Overview
+The Weight Tracking Application is a Java-based desktop application designed to help users track their weight over time and set weight goals. It features a graphical user interface built with Swing and interacts with a SQLite database to store and retrieve user data. The application allows users to log their current weight, set target weights, and manage their weight history.
 
-8) try and get the weeks to show up on the x-axis on the graph page b/c right now all that shows uup are vertical plot points with no time progression 
-9) when you initially click on the graph  page nothing shows up, you have to click the history page first
+## Features
+User Management: Allows users to create accounts, log in, and manage their personal information.
+Weight Tracking: Users can input their current weight and set target weights.
+Database Integration: Utilizes SQLite to store user data and weight records.
+Historical Tracking: Keeps track of historical weight data and updates target and starting weights.
 
-To do: 
+## Main Features
+Login Page: Users can log in with their existing credentials or create a new account.
+Weigh-In Page: Allows users to enter their current weight and set a target weight.
+History Page: Displays historical weight data and updates related to current and target weights.
 
-5) need to style the pages with more swing or html/css
-6) figure out how to make downloadable from Github.
+## User Interface
+Weigh-In Page:
+Enter current weight and target weight in the provided text areas.
+Click "Enter" to submit the values and update the database.
 
+### Known bugs:
+- try and get the weeks to show up on the x-axis on the graph page b/c right now all that shows uup are vertical plot points with no time progression 
 
-
-think about using bmi with break calipers AND adding a calorie counter
+### Future Development:
+- think about adding an option for calculating bmi with calipers
+- adding a calorie counter
