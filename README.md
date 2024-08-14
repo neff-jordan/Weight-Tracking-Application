@@ -1,5 +1,7 @@
 # Weight-Tracking-Application
 
+https://youtu.be/FhvXHKZtLwg
+
 ## Overview
 The Weight Tracking Application is a Java-based desktop application designed to help users track their weight over time and set weight goals. It features a graphical user interface built with Swing and interacts with a SQLite database to store and retrieve user data. The application allows users to log their current weight, set target weights, and manage their weight history.
 
